@@ -39,7 +39,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/apiv1/anuncios?/tag/:tag/venta/:venta', (req, res, next) => {
+router.get('/apiv1/anuncios?/tag/:tag/sale/:sale', (req, res, next) => {
   console.log('req.apiv1', req.apiv1);
   res.send('Ok');
   next();
