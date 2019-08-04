@@ -1,0 +1,7 @@
+[
+{"name": "Figure Morpheo", "sale": true, "price": 100, "img": "/public/images/morpheo.jpg", "tags": ["lifestyle"]},
+{"name": "Figure Trinity", "sale": true, "price": 50, "img": "/public/images/trinity.jpg", "tags": ["lifestyle"]},
+{"name": "Figure Smith", "sale": true, "price": 45, "img": "/public/images/smith.jpg", "tags": ["lifestyle"]},
+{"name": "Figure Neo", "sale": false, "price": 1000, "img": "/public/images/neo.jpg", "tags": ["lifestyle"]}
+
+]

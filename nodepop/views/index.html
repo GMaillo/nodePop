@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <h2>Listado de anuncios</h2>
+    <% results.forEach(anuncio => { %>
+      <p><b>Artículo: </b><%= anuncio.name %></p>
+      <p><b>Tags: </b><%= anuncio.tags %></p>
+      <p><b>Precio: </b><%= anuncio.price %></p>
+      <p><b>¿Se vende?: </b><%= anuncio.sale %></p>
+      <p><b>Imágen: <%= anuncio.img %></p>
+      <p><br></p>
+      <% }) %>
+  </body>
+</html>
