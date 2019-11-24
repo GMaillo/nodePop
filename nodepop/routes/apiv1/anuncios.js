@@ -2,9 +2,17 @@
 
 const express = require('express');
 const router = express.Router();
+const cote = require('cote');
 const Anuncio = require('../../models/Anuncio');
+const jwtAuth = require('../../lib/jwtAuth');
+const requester = new cote.Requester({ name: 'Client'});
 
-router.get('/', async (req, res, next) =>{
+/**
+ * GET /anuncios
+ * Devuelve una lista de anuncios
+ */
+
+router.get('/', jwtAuth(), async (req, res, next) =>{
     try{
         const name = req.query.name;
         const price = req.query.price;
@@ -67,7 +75,7 @@ router.get('/', async (req, res, next) =>{
  * GET tags de los anuncios
  */
 
-router.get('/tags', async function (req, res, next) {
+router.get('/tags', jwtAuth(), async function (req, res, next) {
     try {
         const tags = req.params.tags;
 
@@ -89,25 +97,32 @@ router.get('/tags', async function (req, res, next) {
  * POST creamos un anuncio
  */
 
-router.post('/', async (req, res, next) => {
+router.post('/',jwtAuth(), async (req, res, next) => {
     try {
-        console.log(req.body);
         const data = req.body;
-
-        const anuncio = new Anuncio(data); 
-
-        const anuncioSave = await anuncio.save()
-
+        data.foto = req.file.filename;
+ 
+        const anuncio = new Anuncio(data);
+ 
+     requester.send({
+            type: 'transform',
+            filename: req.file.filename,
+            path: req.file.path,
+            destination: req.file.destination
+        });
+ 
+        const anuncioSave = await anuncio.save();
+ 
         res.json({ success: true, result: anuncioSave });
-    } catch (err) {
-        next(err);
+    } catch (e) {
+        next(e);
     }
-});
+ });
 
 /**
  * PUT / :id de los anuncios
  */
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', jwtAuth(), async (req, res, next) => {
     try {
         const _id = req.params.id;
         const data = req.body;
@@ -123,7 +138,7 @@ router.put('/:id', async (req, res, next) => {
  * DELETE / para eliminar un anuncio
  */
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', jwtAuth(), async (req, res, next) => {
     try {
         const _id = req.params.id;
 

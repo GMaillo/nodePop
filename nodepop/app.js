@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var multer = require('multer');
+var upload = multer({dest: 'public/images'});
 
 
 var app = express();
@@ -12,11 +14,22 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('ejs').__express);
 
+// Middlewares
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images/anuncios/', express.static(path.join(__dirname, 'public/images')));
+
+
+/**
+ * Setup de i18n
+ */
+const i18n = require('./lib/i18nConfigure')();
+app.use(i18n.init);
+
+i18n.setLocale('en');
 
 
 /**
@@ -25,16 +38,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('./lib/connectMongoose');
 require('./models/Anuncio');
 
-app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
 
 /**
  * Rutas de mi aplicación
  */
-app.use('/',       require('./routes/index') );
-app.use('/users',      require('./routes/users'));
+const loginController = require('./routes/LoginController');
+app.use('/apiv1/anuncios', upload.single('foto'), require('./routes/apiv1/anuncios'));
+app.post('/apiv1/login', loginController.loginJWT);
 
-app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
-app.use('/img/anuncios', express.static(path.join(__dirname, './public/images')));
+
+/**
+ * Rutas app Web
+ */
+app.use('/',       require('./routes/index') );
+app.use('/changeLocale', require('./routes/changeLocale'));
 
 app.locals.title='NodePop';
 

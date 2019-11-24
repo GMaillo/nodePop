@@ -19,5 +19,5 @@ conn.once('open', () => {
 // conectar
 mongoose.connect('mongodb://localhost/nodepop', { useNewUrlParser: true });
 
-// exportar la conexión (opcional)
+
 module.exports = conn;
